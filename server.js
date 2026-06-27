@@ -32,10 +32,15 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+const authRoutes = require('./routes/authRoutes');
+
 // Root route
 app.get('/', (req, res) => {
   res.send('Welcome to MediCare Connect API Gateway.');
 });
+
+// Routes mount
+app.use('/api/auth', authRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
