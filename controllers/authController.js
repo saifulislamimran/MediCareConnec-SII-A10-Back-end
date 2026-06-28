@@ -8,13 +8,14 @@ const generateToken = (id) => {
   });
 };
 
-// Helper to set Cookie
+// Helper to set cross-origin Cookie securely for Vercel
 const sendTokenCookie = (res, token) => {
   const cookieOptions = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    secure: true, // Non-negotiable in production
+    sameSite: 'none', // Strictly required for cross-domain Vercel deployments
+    path: '/'
   };
   res.cookie('token', token, cookieOptions);
 };
@@ -192,6 +193,27 @@ exports.logout = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: 'Logged out successfully.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get current logged in user (Session verification)
+// @route   GET /api/auth/me
+// @access  Private
+exports.getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar
+      }
     });
   } catch (error) {
     next(error);
