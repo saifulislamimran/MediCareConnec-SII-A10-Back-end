@@ -22,16 +22,34 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['patient', 'doctor', 'admin'],
+    enum: ['admin', 'doctor', 'patient', 'user'],
     default: 'patient'
+  },
+  photo: {
+    type: String,
+    default: ''
   },
   phone: {
     type: String,
     default: ''
   },
-  avatar: {
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Other', ''],
+    default: ''
+  },
+  bloodGroup: {
     type: String,
     default: ''
+  },
+  address: {
+    type: String,
+    default: ''
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Blocked', 'Pending'],
+    default: 'Active'
   },
   googleId: {
     type: String,
@@ -44,61 +62,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  bloodGroup: {
-    type: String,
-    default: ''
-  },
-  emergencyContactName: {
-    type: String,
-    default: ''
-  },
-  emergencyContactPhone: {
-    type: String,
-    default: ''
-  },
-  address: {
-    type: String,
-    default: ''
+
+  // Enterprise RBAC Extension
+  roleSpecificData: {
+    department: { type: String, default: '' },
+    qualifications: { type: String, default: '' },
+    accessLevel: { type: String, default: 'Level 1 (Standard Operations)' }
   },
 
-  // Role-Specific Attributes
-  department: {
-    type: String,
-    default: ''
-  },
-  qualifications: {
-    type: String,
-    default: ''
-  },
-  accessLevel: {
-    type: String,
-    default: ''
-  },
-
-  // Pending details (Doctor approval flow)
-  pendingDepartment: {
-    type: String,
-    default: ''
-  },
-  pendingQualifications: {
-    type: String,
-    default: ''
-  },
-  pendingAccessLevel: {
-    type: String,
-    default: ''
-  },
-  isDepartmentPending: {
-    type: Boolean,
-    default: false
-  },
-  isQualificationsPending: {
-    type: Boolean,
-    default: false
-  },
-  isAccessLevelPending: {
-    type: Boolean,
-    default: false
+  // HR Approval / Admin Approval pending updates
+  pendingProfileUpdates: {
+    department: { type: String, default: '' },
+    qualifications: { type: String, default: '' },
+    accessLevel: { type: String, default: '' },
+    isPending: { type: Boolean, default: false }
   }
 }, {
   timestamps: true
