@@ -72,7 +72,12 @@ app.use('/api/reminders', reminderRoutes);
 // Error Handler Middleware
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-});
+// Start server (only in local development)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  });
+}
+
+// Export for Vercel Serverless
+module.exports = app;
