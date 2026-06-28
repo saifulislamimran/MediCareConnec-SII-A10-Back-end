@@ -13,6 +13,11 @@ exports.bookAppointment = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Doctor not found' });
     }
 
+    // 🚨 FIX: Verify if the requested slot is actually available
+    if (!doctor.availableSlots.includes(appointmentTime)) {
+       return res.status(400).json({ success: false, message: 'This slot is no longer available' });
+    }
+
     const appointment = await Appointment.create({
       patientId: req.user.id,
       doctorId,
@@ -22,6 +27,10 @@ exports.bookAppointment = async (req, res, next) => {
       appointmentStatus: 'Pending',
       paymentStatus: 'Pending'
     });
+
+    // 🚨 FIX: Remove the booked slot from the Doctor's availability
+    doctor.availableSlots = doctor.availableSlots.filter(slot => slot !== appointmentTime);
+    await doctor.save();
 
     res.status(201).json({ success: true, data: appointment });
   } catch (error) {
