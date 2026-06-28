@@ -36,16 +36,26 @@ app.get('/api/health', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const statsRoutes = require('./routes/statsRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const doctorPortalRoutes = require('./routes/doctorPortalRoutes');
+const prescriptionRoutes = require('./routes/prescriptionRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('Welcome to MediCare Connect API Gateway.');
+  res.send('API is running...');
 });
 
 // Routes mount
 app.use('/api/auth', authRoutes);
-app.use('/api/doctors', doctorRoutes);
+app.use('/api/doctors', doctorRoutes); // Public directory API
 app.use('/api/stats', statsRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/doctor', doctorPortalRoutes); // Private doctor portal API
+app.use('/api/prescriptions', prescriptionRoutes);
+app.use('/api/users', userRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
