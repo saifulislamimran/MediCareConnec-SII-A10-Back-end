@@ -41,6 +41,10 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const doctorPortalRoutes = require('./routes/doctorPortalRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const userRoutes = require('./routes/userRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const ehrRoutes = require('./routes/ehrRoutes');
+const reminderRoutes = require('./routes/reminderRoutes');
 
 // Root route
 app.get('/', (req, res) => {
@@ -56,6 +60,10 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/doctor', doctorPortalRoutes); // Private doctor portal API
 app.use('/api/prescriptions', prescriptionRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/ehr', ehrRoutes);
+app.use('/api/reminders', reminderRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
