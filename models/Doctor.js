@@ -46,6 +46,14 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     enum: ['Pending', 'Verified', 'Rejected'],
     default: 'Pending'
+  },
+  averageRating: {
+    type: Number,
+    default: 0
+  },
+  totalReviews: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true

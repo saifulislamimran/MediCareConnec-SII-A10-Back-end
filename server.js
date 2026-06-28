@@ -32,7 +32,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Route Files
 const authRoutes = require('./routes/authRoutes');
+const doctorRoutes = require('./routes/doctorRoutes');
+const statsRoutes = require('./routes/statsRoutes');
 
 // Root route
 app.get('/', (req, res) => {
@@ -41,6 +44,8 @@ app.get('/', (req, res) => {
 
 // Routes mount
 app.use('/api/auth', authRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
