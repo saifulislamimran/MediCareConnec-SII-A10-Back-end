@@ -49,6 +49,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const ehrRoutes = require('./routes/ehrRoutes');
 const reminderRoutes = require('./routes/reminderRoutes');
+const seedRoutes = require('./routes/seedRoutes');
 
 // Root route
 app.get('/', (req, res) => {
@@ -68,6 +69,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ehr', ehrRoutes);
 app.use('/api/reminders', reminderRoutes);
+app.use('/api/seed', seedRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
