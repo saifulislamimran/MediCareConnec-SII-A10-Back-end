@@ -7,9 +7,9 @@ const Appointment = require('../models/Appointment');
 // @access  Private (Patient/User)
 exports.createPaymentIntent = async (req, res, next) => {
   try {
-    const { appointmentId, amount } = req.body;
+    const { appointmentId } = req.body;
 
-    const appointment = await Appointment.findById(appointmentId);
+    const appointment = await Appointment.findById(appointmentId).populate('doctorId');
     if (!appointment) {
       return res.status(404).json({ success: false, message: 'Appointment not found' });
     }
@@ -18,9 +18,14 @@ exports.createPaymentIntent = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Not authorized for this appointment payment' });
     }
 
-    // Create a PaymentIntent with the order amount and currency
+    const consultationFee = appointment.doctorId.consultationFee;
+    if (!consultationFee) {
+      return res.status(400).json({ success: false, message: 'Doctor consultation fee not set' });
+    }
+
+    // Create a PaymentIntent with the exact backend-verified order amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Stripe expects amount in cents
+      amount: consultationFee * 100, // Stripe expects amount in cents
       currency: 'usd',
       metadata: { appointmentId: appointment._id.toString() }
     });
@@ -29,7 +34,7 @@ exports.createPaymentIntent = async (req, res, next) => {
     const payment = await Payment.create({
       appointmentId,
       patientId: req.user.id,
-      amount,
+      amount: consultationFee,
       transactionId: paymentIntent.id,
       paymentMethod: 'Stripe',
       paymentStatus: 'Completed' // Simulating completion for this phase

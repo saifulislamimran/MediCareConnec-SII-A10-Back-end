@@ -14,11 +14,17 @@ exports.bookAppointment = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Doctor not found' });
     }
 
-    // RELAXED VALIDATION: Allow booking even if slot is not explicitly in availableSlots
-    // This allows seeded doctors without predefined slots to accept bookings
-    // if (!doctor.availableSlots.includes(appointmentTime)) {
-    //    return res.status(400).json({ success: false, message: 'This slot is no longer available' });
-    // }
+    // STRICT CONCURRENCY CONTROL: Prevent Infinite Overbooking
+    const existingAppointment = await Appointment.findOne({
+      doctorId,
+      appointmentDate,
+      appointmentTime,
+      appointmentStatus: { $ne: 'Cancelled' }
+    });
+
+    if (existingAppointment) {
+       return res.status(409).json({ success: false, message: 'This slot is no longer available' });
+    }
 
     const appointment = await Appointment.create({
       patientId: req.user.id,
