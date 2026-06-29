@@ -6,7 +6,8 @@ const Doctor = require('../models/Doctor');
 // @access  Private (Patient/User)
 exports.bookAppointment = async (req, res, next) => {
   try {
-    const { doctorId, appointmentDate, appointmentTime, symptoms } = req.body;
+    let { doctorId, appointmentDate, appointmentTime, symptoms } = req.body;
+    appointmentDate = appointmentDate || req.body.date || new Date().toISOString().split('T')[0];
 
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
