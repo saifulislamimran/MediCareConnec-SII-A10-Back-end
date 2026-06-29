@@ -10,7 +10,7 @@ const { verifyToken, verifyRole } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.use(verifyToken);
-router.use(verifyRole('patient', 'user'));
+router.use(verifyRole('patient'));
 
 router.post('/book', bookAppointment);
 router.get('/my-list', getMyAppointmentList);

@@ -9,7 +9,7 @@ const { verifyToken, verifyRole } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.use(verifyToken);
-router.use(verifyRole('doctor'));
+router.use(verifyRole('admin', 'doctor'));
 
 router.get('/requests', getDoctorRequests);
 router.patch('/requests/:id', updateRequestStatus);
